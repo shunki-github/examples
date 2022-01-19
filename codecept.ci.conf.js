@@ -1,35 +1,35 @@
 const { setHeadlessWhen } = require('@codeceptjs/configure');
-
+const { devices } = require('playwright');
+require('dotenv').config();
+// turn on headless mode when running with HEADLESS=true environment variable
+// export HEADLESS=true && npx codeceptjs run
+//setHeadlessWhen(process.env.HEADLESS);
 setHeadlessWhen(true);
 
 exports.config = {
-  tests: './todomvc-tests/**/*_test.js',
+  tests: './Temp.js',
   output: './output',
   helpers: {
     Playwright: {
-      url: 'http://localhost',
-      waitForTimeout: 5000,
-      show: true,
-    },
-
-    REST: {},
-
-    CustomHelper: {
-      require: './todomvc-tests/helpers/custom.helper.js'
+      url: 'https://web.bachelorapp.net',
+      restart: false,
+      keepBrowserState: true,
+      keepCookies: true,
+      waitForNavigation: 'domcontentloaded',
+      browser: 'chromium',
+      emulate: devices['iPhone 8']
     }
-  },
-
-  gherkin: {
-    features: './todomvc-tests/features/*.feature',
-    steps: [
-      './todomvc-tests/step-definitions/create-todos.steps.js'
-    ]
-  },
-
-  include: {
-    TodosPage: './todomvc-tests/pages/todos.page.js'
   },
   bootstrap: null,
   mocha: {},
-  name: 'codecept demo tests'
-}
+  name: 'bachelor-user-frontend',
+  plugins: {
+    pauseOnFail: {},
+    retryFailedStep: {
+      enabled: true
+    },
+    tryTo: {
+      enabled: true
+    }
+  }
+};
